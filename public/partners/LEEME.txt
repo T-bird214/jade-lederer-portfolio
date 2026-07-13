@@ -1,0 +1,14 @@
+Coloca aquí el logo y la imagen de portada de cada partner/aliado.
+
+Cada partner necesita 2 archivos, ej. para "Ultra-CleanGT":
+- ultracleangt-logo.webp   (logo, fondo transparente idealmente)
+- ultracleangt-cover.webp  (imagen de portada, horizontal)
+
+Los nombres de archivo deben coincidir exactamente con los definidos en
+src/content/partners.ts (campos "logo" e "image" de cada partner).
+
+Para agregar un partner nuevo, agrega un objeto al arreglo PARTNERS en ese
+mismo archivo con su nombre, logo, imagen, descripción y enlace (ctaLink).
+Si aún no tienes el enlace oficial, deja "ctaLink: '#'" y "isPlaceholderLink: true".
+
+Este archivo LEEME.txt no afecta el sitio, es solo una guía. Puedes borrarlo cuando quieras.

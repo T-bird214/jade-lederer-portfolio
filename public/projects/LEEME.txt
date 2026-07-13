@@ -1,0 +1,13 @@
+Coloca aquí las imágenes de los proyectos residenciales destacados.
+
+Formato recomendado: .webp (más liviano que .jpg/.png)
+Tamaño recomendado: 800x1000px aprox. (proporción vertical 3:4)
+
+Pasos:
+1. Copia tu imagen a esta carpeta (public/projects/), ej: mi-proyecto.webp
+2. Abre src/content/projects.ts
+3. Agrega un objeto al arreglo PROJECTS:
+   { name: "Nombre del Proyecto", image: "mi-proyecto.webp" }
+4. Guarda. No necesitas tocar ningún componente ni estilo.
+
+Este archivo LEEME.txt no afecta el sitio, es solo una guía. Puedes borrarlo cuando quieras.

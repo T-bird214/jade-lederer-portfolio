@@ -1,0 +1,9 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Allow: /
+
+# Block indexing of API endpoints
+Disallow: /api/
+
+# Sitemap location
+Sitemap: https://jadedeleon.com/sitemap.xml

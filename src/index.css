@@ -1,0 +1,66 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-serif: "Playfair Display", Georgia, serif;
+  --font-sans: "Plus Jakarta Sans", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+  
+  /* Primary Warm Neutrals: Travertine, Sand, Stone, Linen */
+  --color-travertine-50: #F5F2ED;
+  --color-travertine-100: #EAE7E0;
+  --color-travertine-200: #D1CEC7;
+  --color-travertine-300: #BDB9AD;
+  --color-travertine-400: #A8A396;
+  --color-travertine-500: #9C9890;
+  --color-travertine-600: #858075;
+  --color-travertine-700: #6B665E;
+  --color-travertine-800: #4A4741;
+  --color-travertine-900: #1A1A1A;
+  --color-travertine-950: #0F0E0D;
+
+  /* Accent Metallics: Copper, Bronze, Camel (Gold theme) */
+  --color-copper-50: #FAF8F5;
+  --color-copper-100: #F1ECE3;
+  --color-copper-200: #E3DAC9;
+  --color-copper-300: #D2C4AF;
+  --color-copper-400: #BEAE96;
+  --color-copper-500: #A68A64;
+  --color-copper-600: #8E7351;
+  --color-copper-700: #745C3F;
+  --color-copper-800: #57442D;
+  --color-copper-900: #3D2F1F;
+  --color-copper-950: #1F170F;
+
+  /* Contrast Darks: Charcoal, Graphite, Carbon */
+  --color-charcoal-50: #FAF9F7;
+  --color-charcoal-100: #F1EFEA;
+  --color-charcoal-200: #E4E1D9;
+  --color-charcoal-400: #9C9890;
+  --color-charcoal-600: #6B665E;
+  --color-charcoal-800: #2C2C2C;
+  --color-charcoal-900: #1A1A1A;
+  --color-charcoal-950: #101010;
+}
+
+@layer base {
+  body {
+    background-color: var(--color-travertine-50);
+    color: var(--color-charcoal-900);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    scroll-behavior: smooth;
+  }
+}
+
+/* Custom fade scroll effects */
+.reveal-on-scroll {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.8s ease-out;
+}
+
+.reveal-on-scroll.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
