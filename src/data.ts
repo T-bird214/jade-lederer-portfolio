@@ -10,6 +10,7 @@ export const JADE_PROFILE = {
   title: "Asesora Inmobiliaria",
   location: "Guatemala",
   phone: "+502 5555-5652",
+  whatsapp: "+502 5555-5652", // número para wa.me; dejar "" para ocultar los botones de WhatsApp
   email: "jadelederer.gt@gmail.com",
   linkedin: "https://www.linkedin.com/in/jade-lederer-gt/",
   bio: "Asesora inmobiliaria en Guatemala con años de experiencia, especializada en acompañar a cada cliente de principio a fin: desde la primera visita hasta la firma de escrituras. Actualmente forma parte del equipo comercial de TERRE Apartamentos, zona 15, generando resultados desde su incorporación al proyecto.",
