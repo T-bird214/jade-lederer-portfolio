@@ -7,10 +7,10 @@ Sitio comercial de Jade Lederer, asesora inmobiliaria en Ciudad de Guatemala.
 - Dueño: Daniel. Entorno: Fedora + zsh. Navegador: Brave (Flatpak).
 
 ## Stack
-React 19 + TypeScript + Tailwind v4 + Vite 6. Backend Express (`server.ts`) con `/api/chat` (Gemini) y `/api/contact`.
-Variables (solo nombres): `GEMINI_API_KEY`, `APP_URL`.
+React 19 + TypeScript + Tailwind v4 + Vite 6. API: funciones de Vercel en `api/` (`/api/chat` Gemini, `/api/contact` Resend) con la lógica en `server/`; `server.ts` (Express) solo para desarrollo local. El formulario envía con Web3Forms desde el navegador (`src/lib/contact.ts`).
+Variables (solo nombres): `GEMINI_API_KEY`, `GEMINI_MODEL`, `VITE_WEB3FORMS_ACCESS_KEY`, `RESEND_API_KEY`, `CONTACT_TO_EMAIL`, `CONTACT_FROM_EMAIL`. Ver `.env.example`.
 
-⚠️ En Vercel el proyecto se sirve como sitio estático Vite: `server.ts` NO se ejecuta, por lo que `/api/chat` y `/api/contact` responden 404 en producción (pendiente de migrar a funciones de Vercel).
+En `api/` y `server/` los imports relativos llevan extensión `.js` (el paquete es ESM y Node no resuelve imports sin extensión).
 
 ## Comandos
 `npm ci` · `npm run dev` (tsx server.ts) · `npm run build` · `npm run lint` (tsc)

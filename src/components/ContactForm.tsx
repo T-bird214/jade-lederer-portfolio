@@ -4,8 +4,10 @@
  */
 
 import React, { useState } from "react";
-import { Send, CheckCircle2, Phone, Mail, Clock, ShieldCheck, Landmark, Linkedin } from "lucide-react";
+import { Send, CheckCircle2, Phone, Mail, Clock, ShieldCheck, Landmark, Linkedin, MessageCircle } from "lucide-react";
 import { JADE_PROFILE } from "../data";
+import { sendContact } from "../lib/contact";
+import { whatsappUrl } from "../lib/whatsapp";
 
 export default function ContactForm() {
   const [formData, setFormData] = useState({
@@ -14,7 +16,7 @@ export default function ContactForm() {
     phone: "",
     interest: "Comprar Apartamento / Casa",
     zone: "Zona 10",
-    step: "Explorando opciones",
+    step: "Explorando opciones iniciales",
     message: "",
     website: "" // Honeypot spam field
   });
@@ -60,17 +62,9 @@ export default function ContactForm() {
     setErrorMessage(null);
 
     try {
-      const response = await fetch("/api/contact", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(formData)
-      });
+      const data = await sendContact(formData);
 
-      const data = await response.json();
-
-      if (response.ok && data.success) {
+      if (data.success) {
         setSuccessMessage(data.message);
         setFormData({
           name: "",
@@ -78,12 +72,12 @@ export default function ContactForm() {
           phone: "",
           interest: "Comprar Apartamento / Casa",
           zone: "Zona 10",
-          step: "Explorando opciones",
+          step: "Explorando opciones iniciales",
           message: "",
           website: ""
         });
       } else {
-        setErrorMessage(data.message || "Ocurrió un error al enviar el formulario.");
+        setErrorMessage(data.message);
       }
     } catch (error) {
       console.error("Error en submit de contacto:", error);
@@ -92,6 +86,16 @@ export default function ContactForm() {
       setIsLoading(false);
     }
   };
+
+  const waContactUrl = whatsappUrl();
+  const waFormUrl = whatsappUrl(
+    [
+      `Hola Jade, soy ${formData.name || "…"}.`,
+      `Me interesa: ${formData.interest} en ${formData.zone}.`,
+      `Etapa: ${formData.step}.`,
+      formData.message
+    ].filter(Boolean).join(" ")
+  );
 
   return (
     <section id="contacto" className="bg-travertine-100 py-24 border-b border-travertine-200">
@@ -122,7 +126,7 @@ export default function ContactForm() {
                 </div>
                 <div>
                   <h4 className="font-sans font-semibold text-[10px] text-charcoal-800 uppercase tracking-[0.15em]">
-                    Llamada Directa / WhatsApp
+                    Llamada Directa
                   </h4>
                   <a
                     href={`tel:+${JADE_PROFILE.phone.replace(/[^0-9]/g, "")}`}
@@ -132,6 +136,28 @@ export default function ContactForm() {
                   </a>
                 </div>
               </div>
+
+              {/* WhatsApp */}
+              {waContactUrl && (
+                <div className="flex items-start space-x-4">
+                  <div className="p-2.5 bg-white border border-travertine-200 text-copper-500">
+                    <MessageCircle size={14} />
+                  </div>
+                  <div>
+                    <h4 className="font-sans font-semibold text-[10px] text-charcoal-800 uppercase tracking-[0.15em]">
+                      WhatsApp
+                    </h4>
+                    <a
+                      href={waContactUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-serif text-base text-charcoal-950 hover:text-copper-500 transition-colors"
+                    >
+                      Escribir por WhatsApp
+                    </a>
+                  </div>
+                </div>
+              )}
 
               {/* Email */}
               <div className="flex items-start space-x-4">
@@ -381,6 +407,14 @@ export default function ContactForm() {
                 {errorMessage && (
                   <div className="text-xs text-red-700 bg-red-50 border border-red-200 p-3.5 rounded-none">
                     {errorMessage}
+                    {waFormUrl && (
+                      <>
+                        {" "}También puedes{" "}
+                        <a href={waFormUrl} target="_blank" rel="noopener noreferrer" className="underline font-semibold">
+                          enviarle tu solicitud por WhatsApp
+                        </a>.
+                      </>
+                    )}
                   </div>
                 )}
 

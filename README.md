@@ -22,7 +22,9 @@ No es un proyecto Next.js: es un proyecto generado en **Google AI Studio**, con 
 ## 2. Estructura del proyecto
 
 ```
-├── server.ts                    # Backend Express: sirve el sitio + /api/chat + /api/contact
+├── api/                         # Funciones de Vercel: /api/chat y /api/contact (producción)
+├── server/                      # Lógica compartida de chat (Gemini) y contacto (Resend)
+├── server.ts                    # Express solo para desarrollo local: sirve el sitio + /api/*
 ├── index.html                   # HTML raíz: título, meta tags SEO, Open Graph, Schema.org
 ├── src/
 │   ├── App.tsx                  # Composición de todas las secciones de la página
@@ -75,10 +77,12 @@ Abre `http://localhost:3000`.
 
 | Variable | Obligatoria | Descripción |
 |---|---|---|
-| `GEMINI_API_KEY` | Sí, para que el asistente IA funcione | Clave de la API de Gemini (Google AI Studio → Secrets/API Keys) |
-| `APP_URL` | Recomendada | URL pública del sitio en producción |
+| `GEMINI_API_KEY` | Sí, para que el asistente IA funcione | Clave de la API de Gemini (Google AI Studio → API Keys) |
+| `GEMINI_MODEL` | No | Modelo de Gemini (por defecto `gemini-3.5-flash`) |
+| `VITE_WEB3FORMS_ACCESS_KEY` | Sí, para que el formulario envíe | Access key de Web3Forms; los mensajes llegan al correo con que se creó. Es pública por diseño y se incrusta al compilar: tras cambiarla hay que volver a desplegar |
+| `RESEND_API_KEY`, `CONTACT_TO_EMAIL`, `CONTACT_FROM_EMAIL` | No (futuro) | Envío por servidor con Resend vía `/api/contact`; solo se usa si `VITE_WEB3FORMS_ACCESS_KEY` está vacía |
 
-**Nunca subas `.env` o `.env.local` a GitHub.** Ya están excluidos en `.gitignore`. En producción, configura estas variables como *Secrets* en el panel de Google AI Studio (o como variables de entorno del servicio, si despliegas en otro proveedor tipo Render/Railway/VPS).
+**Nunca subas `.env` o `.env.local` a GitHub.** Ya están excluidos en `.gitignore`. En producción, configura estas variables en Vercel → proyecto `portafolio-comercial-jade` → Settings → Environment Variables (Production y Preview).
 
 ---
 
@@ -152,8 +156,8 @@ Para actualizar experiencia laboral, logros, valores, pasos del proceso de compr
 
 ## 8. Cómo funciona el Asistente de IA
 
-- Está conectado a Gemini 3.5 Flash a través de `server.ts` (`/api/chat`).
-- Su contexto de negocio (`BUSINESS_CONTEXT`) se construye **dinámicamente** a partir de `src/data.ts` y `src/content/*.ts` — no hay datos escritos a mano en el prompt del sistema. Si actualizas el perfil, la experiencia o los proyectos, el asistente automáticamente "sabe" la información nueva sin que tengas que tocar `server.ts`.
+- Está conectado a Gemini a través de `/api/chat`: en Vercel es la función `api/chat.ts`, en local la sirve `server.ts`; ambas usan la lógica de `server/chat.ts`.
+- Su contexto de negocio (`BUSINESS_CONTEXT`) se construye **dinámicamente** a partir de `src/data.ts` y `src/content/*.ts` — no hay datos escritos a mano en el prompt del sistema. Si actualizas el perfil, la experiencia o los proyectos, el asistente automáticamente "sabe" la información nueva sin que tengas que tocar `server/chat.ts`.
 - Reglas de comportamiento ya incorporadas: nunca inventa propiedades, precios o disponibilidad; nunca menciona bancos específicos; siempre invita a dejar datos de contacto cuando no puede resolver algo con certeza.
 - Estructura preparada para integrar **RAG (Retrieval-Augmented Generation)** en el futuro: `BUSINESS_CONTEXT` ya está organizado como un objeto estructurado (no un solo bloque de texto), lo que facilita sustituirlo más adelante por una búsqueda semántica sin rediseñar el endpoint.
 - Está protegido con `express-rate-limit` (100 solicitudes cada 15 minutos por IP) para evitar abuso que genere costos innecesarios en la API de Gemini.
@@ -195,7 +199,7 @@ Si en el futuro decides migrar a otro proveedor (Render, Railway, un VPS, etc.),
 
 - **CMS**: todo el contenido (`src/data.ts`, `src/content/*.ts`) exporta datos planos tipados. El día que quieras conectar un CMS (Supabase, Notion, uno propio), solo tienes que reemplazar estos archivos por una función que haga `fetch`/consulta y devuelva exactamente la misma forma de datos (`Project[]`, `Partner[]`, `Testimonial[]`, etc.) — ningún componente necesita cambiar.
 - **RAG para el asistente**: ver sección 8.
-- **Formulario de contacto → Resend/CRM real**: hoy `/api/contact` valida, filtra spam y responde con éxito, pero solo deja constancia en el log del servidor (`console.log`). Cuando quieras recibir los leads por correo o en un CRM, ese es el único bloque de `server.ts` que hay que ampliar (agregar el envío por Resend o el POST al CRM que selecciones).
+- **Formulario de contacto → Resend/CRM real**: hoy el formulario envía con Web3Forms desde el navegador (`src/lib/contact.ts`). Cuando haya dominio propio, basta con vaciar `VITE_WEB3FORMS_ACCESS_KEY` y configurar `RESEND_API_KEY` + `CONTACT_TO_EMAIL`: `/api/contact` (`server/contact.ts`) ya envía con Resend.
 
 ---
 
