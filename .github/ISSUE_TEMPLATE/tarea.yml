@@ -1,0 +1,13 @@
+name: ✅ Tarea
+description: Trabajo planificado (contenido, infra, SEO, docs, feature)
+body:
+  - type: textarea
+    id: objetivo
+    attributes: { label: Objetivo, description: ¿Qué hay que lograr y por qué? }
+    validations: { required: true }
+  - type: textarea
+    id: criterios
+    attributes: { label: Criterios de aceptación, value: "- [ ] \n- [ ] " }
+  - type: textarea
+    id: notas
+    attributes: { label: Notas / enlaces }
